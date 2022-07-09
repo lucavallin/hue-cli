@@ -1,5 +1,5 @@
 [package]
-name = "hue"
+name = "hue-cli"
 version = "0.1.0"
 edition = "2021"
 
@@ -8,3 +8,5 @@ edition = "2021"
 [dependencies]
 clap = { version = "3.2.8", features = ["derive"] }
 huelib = "0.13.2"
+reqwest = { version = "0.11.11", features = ["json"] }
+tokio = { version = "1.19.2", features = ["full"] }
