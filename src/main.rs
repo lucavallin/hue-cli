@@ -1,4 +1,5 @@
 use clap::{Parser, Subcommand};
+use std::collections::HashMap;
 
 #[derive(Parser)]
 #[clap(author, version, about, long_about = None)]
@@ -24,13 +25,25 @@ async fn main() -> Result<(), reqwest::Error> {
 
     match &cli.command {
         Commands::Auth { bridge_ip } => {
-            println!("Requested auth for Bridge IP: {:?}", bridge_ip);
+            println!(
+                "Requested auth for Bridge IP: {:?}",
+                bridge_ip.as_ref().unwrap()
+            );
+
+            let mut body = HashMap::new();
+            body.insert("devicetype", "hue-cli");
+
             let resp = reqwest::Client::new()
                 .post(format!("http://{}/api", bridge_ip.as_ref().unwrap()))
+                .json(&body)
                 .send()
                 .await?
-                .json()
+                .text()
                 .await?;
+
+            println!(
+                "Press the button on your Philips Hue Bridge and then press any key to continue..."
+            );
 
             println!("{:#?}", resp);
             Ok(())
